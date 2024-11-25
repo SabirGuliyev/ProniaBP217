@@ -13,6 +13,22 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\admin\fonts\.DS_Store" />
+    <None Include="wwwroot\admin\fonts\Roboto\.DS_Store" />
+    <None Include="wwwroot\admin\images\.DS_Store" />
+    <None Include="wwwroot\admin\images\auth\.DS_Store" />
+    <None Include="wwwroot\admin\images\faces\.DS_Store" />
+    <None Include="wwwroot\admin\js\.DS_Store" />
+    <None Include="wwwroot\admin\vendors\.DS_Store" />
   </ItemGroup>
 
 </Project>
