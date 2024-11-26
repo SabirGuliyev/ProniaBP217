@@ -1,0 +1,72 @@
+﻿@model List<Slide>
+
+
+@{
+    int count = 0;
+}
+<div class="row">
+
+
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Slide Table</h4>
+
+                <div class="table-responsive">
+                    <a asp-action="create" class="btn btn-success"> Create Slide</a>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    No
+                                </th>
+                                <th>
+                                    Image
+                                </th>
+                                <th>
+                                    Title
+                                </th>
+                                <th>
+                                    Order
+                                </th>
+                                <th>
+                                    Settings
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Slide slide in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <td>
+                                        @count
+                                    </td>
+                                    <td>
+                                       <img  src="~/assets/images/website-images/@slide.Image"/>
+                                    </td>
+                                    <td>
+                                        <p>@slide.Title</p>
+                                    </td>
+                                    <td>
+                                        <p>@slide.Order</p>
+                                    </td>
+                                    <td>
+                                        <a asp-action="update" asp-route-id="@slide.Id" class="btn btn-warning btn-info"> <i class="mdi mdi-grease-pencil"></i> </a>
+                                        <a asp-action="delete" asp-route-id="@slide.Id" class="btn btn-danger btn-info"> <i class="mdi mdi-delete"></i></a>
+                                        <a class="btn btn-primary"><i class="mdi mdi-information"></i></a>
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
