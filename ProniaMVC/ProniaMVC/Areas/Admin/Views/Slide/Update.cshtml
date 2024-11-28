@@ -1,15 +1,16 @@
-﻿
-
-
-@model CreateSlideVM
+﻿@model UpdateSlideVM
 
 <div class="row">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Create Category</h4>
+                <h4 class="card-title">Update Slide</h4>
 
                 <form class="forms-sample" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                       <img style="width:150px;height:150px;" src="~/assets/images/website-images/@Model.Image"/>
+                        <input asp-for="Image" class="form-control" type="hidden">
+                    </div>
                     <div class="form-group">
                         <label asp-for="Photo">Photo</label>
                         <input asp-for="Photo" class="form-control" placeholder="Photo" accept="image/*">
@@ -30,8 +31,8 @@
                         <input asp-for="Order" class="form-control" placeholder="Order">
                         <span asp-validation-for="Order" class="text-danger"></span>
                     </div>
-                  
-                     <div class="form-group">
+
+                    <div class="form-group">
                         <label asp-for="Description">Description</label>
                         <textarea asp-for="Description" class="form-control" placeholder="Description"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
