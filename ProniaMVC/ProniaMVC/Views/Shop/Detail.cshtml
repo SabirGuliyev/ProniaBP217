@@ -191,9 +191,11 @@
                         <div class="product-category product-tags">
                             <span class="title">Tags :</span>
                             <ul>
-                                <li>
-                                    <a href="#">Furniture</a>
-                                </li>
+                                @foreach(ProductTag pTag in Model.Product.ProductTags){
+                                    <li>
+                                        <a href="#">@pTag.Tag.Name </a>
+                                    </li>
+                                }
                             </ul>
                         </div>
                         <div class="product-category social-link align-items-center pb-0">

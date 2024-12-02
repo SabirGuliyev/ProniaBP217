@@ -1,22 +1,12 @@
-﻿@model CreateProductVM
+﻿@model UpdateProductVM
 
 <div class="row">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Create Product</h4>
+                <h4 class="card-title">Update Product</h4>
 
                 <form class="forms-sample" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label asp-for="MainPhoto">Main Image</label>
-                        <input asp-for="MainPhoto" class="form-control" accept="image/*">
-                        <span asp-validation-for="MainPhoto" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="HoverPhoto">Secondary Image</label>
-                        <input asp-for="HoverPhoto" class="form-control" accept="image/*">
-                        <span asp-validation-for="HoverPhoto" class="text-danger"></span>
-                    </div>
                     <div class="form-group">
                         <label asp-for="Name">Name</label>
                         <input asp-for="Name" class="form-control" placeholder="Name" accept="image/*">
@@ -35,7 +25,6 @@
                     <div class="form-group">
                         <label asp-for="CategoryId">Category</label>
                         <select asp-for=CategoryId class="form-control" asp-items="new SelectList(Model.Categories,nameof(Category.Id),nameof(Category.Name))">
-                            <option selected disabled value="">Choose Category</option>
                         </select>
                         <span asp-validation-for="CategoryId" class="text-danger"></span>
                     </div>
@@ -45,19 +34,6 @@
                         </select>
                         <span asp-validation-for="TagIds" class="text-danger"></span>
                     </div>
-                   @*  <div class="form-group">
-                        <label asp-for="CategoryId">Category</label>
-                        <select asp-for=CategoryId class="form-control">
-
-
-                            @foreach (Category category in Model.Categories)
-                            {
-                                <option value="@category.Id">@category.Name</option>
-                            }
-                            <option selected disabled value="">Choose Category</option>
-                        </select>
-                        <span asp-validation-for="CategoryId" class="text-danger"></span>
-                    </div> *@
 
                     <div class="form-group">
                         <label asp-for="Description">Description</label>
@@ -66,7 +42,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <a asp-action="index" class="btn btn-light">Cancel</a>
+                    <a asp-action="index"  class="btn btn-light">Cancel</a>
                 </form>
             </div>
         </div>
