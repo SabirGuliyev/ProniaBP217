@@ -18,6 +18,11 @@
                         <span asp-validation-for="HoverPhoto" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="AdditionalPhotos">Additional Images</label>
+                        <input asp-for="AdditionalPhotos" class="form-control" accept="image/*">
+                        <span asp-validation-for="AdditionalPhotos" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         <label asp-for="Name">Name</label>
                         <input asp-for="Name" class="form-control" placeholder="Name" accept="image/*">
                         <span asp-validation-for="Name" class="text-danger"></span>
