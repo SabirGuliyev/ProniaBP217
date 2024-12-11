@@ -31,10 +31,12 @@ namespace ProniaMVC.Controllers
             .Take(2)
             .ToListAsync(),
 
-            Products=await _context.Products
+            NewProducts=await _context.Products
+            .OrderByDescending(p=>p.CreatedAt)
             .Take(8)
-            .Include(p => p.ProductImages.Where(pi=>pi.IsPrimary!=null))
-            .ToListAsync()
+            .Include(p => p.ProductImages.Where(pi => pi.IsPrimary != null))
+            .ToListAsync(),
+
             };
 
             return View(homeVM);

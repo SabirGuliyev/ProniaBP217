@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿
+@using ProniaMVC.Services.Interfaces
+@inject ILayoutService _layoutService;
+@{
+
+    Dictionary<string, string> settings = await _layoutService.GetSettingsAsync();
+
+}
+
+<!DOCTYPE html>
 <html lang="zxx">
 <head>
     <meta charset="UTF-8" />
@@ -97,11 +106,11 @@
                             <div class="header-middle-wrap position-relative">
                                 <div class="header-contact d-none d-lg-flex">
                                     <i class="pe-7s-call"></i>
-                                    <a href="tel://+00-123-456-789">+00 123 456 789</a>
+                                    <a href="tel://@settings["Phone"]">@settings["Phone"]</a>
                                 </div>
 
-                                <a href="index.html" class="header-logo">
-                                    <img src="~/assets/images/logo/dark.png" alt="Header Logo" />
+                                <a href="www.youtube.com" class="header-logo">
+                                    <img src="~/assets/images/logo/@settings["Logo"]" alt="Header Logo" />
                                 </a>
 
                                 <div class="header-right">
@@ -111,7 +120,7 @@
                                                class="search-btn bt"
                                                data-bs-toggle="modal"
                                                data-bs-target="#exampleModal">
-                                                <i class="pe-7s-search"></i>
+                                                @Html.Raw(settings["SearchIcon"])
                                             </a>
                                         </li>
                                         <li class="dropdown d-none d-lg-block">
@@ -303,7 +312,7 @@
                         <div class="row align-items-center">
                             <div class="col-lg-3 col-6">
                                 <a href="index.html" class="header-logo">
-                                    <img src="~/assets/images/logo/dark.png" alt="Header Logo" />
+                                    <img src="~/assets/images/logo/@settings["Logo"]" alt="Header Logo" />
                                 </a>
                             </div>
                             <div class="col-lg-6 d-none d-lg-block">
@@ -435,7 +444,7 @@
                                                class="search-btn bt"
                                                data-bs-toggle="modal"
                                                data-bs-target="#exampleModal">
-                                                <i class="pe-7s-search"></i>
+                                                @Html.Raw(settings["SearchIcon"])
                                             </a>
                                         </li>
                                         <li class="dropdown d-none d-lg-block">
@@ -489,7 +498,7 @@
                         </div>
                         <div class="header-contact offcanvas-contact">
                             <i class="pe-7s-call"></i>
-                            <a href="tel://+00-123-456-789">+00 123 456 789</a>
+                            <a href="tel://@settings["Phone"]">@settings["Phone"]</a>
                         </div>
                         <div class="offcanvas-user-info">
                             <ul class="dropdown-wrap">
@@ -802,7 +811,7 @@
                                     <button class="search-btn"
                                             type="submit"
                                             aria-label="searchbtn">
-                                        <i class="pe-7s-search"></i>
+                                        @Html.Raw(settings["SearchIcon"])
                                     </button>
                                 </form>
                             </div>
@@ -910,178 +919,7 @@
         @RenderBody()
 
         <!-- Begin Footer Area -->
-        <div class="footer-area"
-             data-bg-image="~/assets/images/footer/bg/1-1920x465.jpg">
-            <div class="footer-top section-space-top-100 pb-60">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="footer-widget-item">
-                                <div class="footer-widget-logo">
-                                    <a href="index.html">
-                                        <img src="~/assets/images/logo/dark.png" alt="Logo" />
-                                    </a>
-                                </div>
-                                <p class="footer-widget-desc">
-                                    Lorem ipsum dolor sit amet, consec adipisl elit, sed do
-                                    eiusmod tempor
-                                    <br />
-                                    incidio ut labore et dolore magna.
-                                </p>
-                                <div class="social-link with-border">
-                                    <ul>
-                                        <li>
-                                            <a href="#"
-                                               data-tippy="Facebook"
-                                               data-tippy-inertia="true"
-                                               data-tippy-animation="shift-away"
-                                               data-tippy-delay="50"
-                                               data-tippy-arrow="true"
-                                               data-tippy-theme="sharpborder">
-                                                <i class="fa fa-facebook"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                               data-tippy="Twitter"
-                                               data-tippy-inertia="true"
-                                               data-tippy-animation="shift-away"
-                                               data-tippy-delay="50"
-                                               data-tippy-arrow="true"
-                                               data-tippy-theme="sharpborder">
-                                                <i class="fa fa-twitter"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                               data-tippy="Pinterest"
-                                               data-tippy-inertia="true"
-                                               data-tippy-animation="shift-away"
-                                               data-tippy-delay="50"
-                                               data-tippy-arrow="true"
-                                               data-tippy-theme="sharpborder">
-                                                <i class="fa fa-pinterest"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                               data-tippy="Dribbble"
-                                               data-tippy-inertia="true"
-                                               data-tippy-animation="shift-away"
-                                               data-tippy-delay="50"
-                                               data-tippy-arrow="true"
-                                               data-tippy-theme="sharpborder">
-                                                <i class="fa fa-dribbble"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-4 pt-40">
-                            <div class="footer-widget-item">
-                                <h3 class="footer-widget-title">Useful Links</h3>
-                                <ul class="footer-widget-list-item">
-                                    <li>
-                                        <a href="#">About Pronia</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">How to shop</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">FAQ</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Contact us</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Log in</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-4 pt-40">
-                            <div class="footer-widget-item">
-                                <h3 class="footer-widget-title">My Account</h3>
-                                <ul class="footer-widget-list-item">
-                                    <li>
-                                        <a href="#">Sign In</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">View Cart</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">My Wishlist</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Track My Order</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Help</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-4 pt-40">
-                            <div class="footer-widget-item">
-                                <h3 class="footer-widget-title">Our Service</h3>
-                                <ul class="footer-widget-list-item">
-                                    <li>
-                                        <a href="#">Payment Methods</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Money Guarantee!</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Returns</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Shipping</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Privacy Policy</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 pt-40">
-                            <div class="footer-contact-info">
-                                <h3 class="footer-widget-title">Got Question? Call Us</h3>
-                                <a class="number" href="tel://123-456-789">123 456 789</a>
-                                <div class="address">
-                                    <ul>
-                                        <li>Your Address Goes Here</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="payment-method">
-                                <a href="#">
-                                    <img src="~/assets/images/website-images/1.png"
-                                         alt="Payment Method" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="copyright">
-                                <span class="copyright-text">
-                                    © 2021 Pronia Made with
-                                    <i class="fa fa-heart text-danger"></i> by
-                                    <a href="https://hasthemes.com/"
-                                       rel="noopener"
-                                       target="_blank">HasThemes</a>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @await Component.InvokeAsync("Footer")
         <!-- Footer Area End Here -->
         <!-- Begin Modal Area -->
         <div class="modal quick-view-modal fade"

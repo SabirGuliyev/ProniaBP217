@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ProniaMVC.Controllers;
 using ProniaMVC.DAL;
 using ProniaMVC.Models;
+using ProniaMVC.Services.Implementations;
+using ProniaMVC.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
     opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
 }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+builder.Services.AddScoped<ILayoutService,LayoutService>();
 var app = builder.Build();
 
 
