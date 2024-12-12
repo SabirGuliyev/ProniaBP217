@@ -4,7 +4,8 @@
 @{
 
     Dictionary<string, string> settings = await _layoutService.GetSettingsAsync();
-
+    List<BasketItemVM> basketItems = await _layoutService.GetBasketAsync();
+    decimal total = 0;
 }
 
 <!DOCTYPE html>
@@ -163,7 +164,7 @@
                                         <li class="minicart-wrap me-3 me-lg-0">
                                             <a href="#miniCart" class="minicart-btn toolbar-btn">
                                                 <i class="pe-7s-shopbag"></i>
-                                                <span class="quantity">3</span>
+                                                <span class="quantity">@basketItems.Count</span>
                                             </a>
                                         </li>
                                         <li class="mobile-menu_wrap d-block d-lg-none">
@@ -474,7 +475,7 @@
                                         <li class="minicart-wrap me-3 me-lg-0">
                                             <a href="#miniCart" class="minicart-btn toolbar-btn">
                                                 <i class="pe-7s-shopbag"></i>
-                                                <span class="quantity">3</span>
+                                                <span class="quantity">@basketItems.Count</span>
                                             </a>
                                         </li>
                                         <li class="mobile-menu_wrap d-block d-lg-none">
@@ -835,82 +836,52 @@
                             </a>
                         </div>
                         <ul class="minicart-list">
-                            <li class="minicart-product">
-                                <a class="product-item_remove" href="#">
-                                    <i class="pe-7s-close"
-                                       data-tippy="Remove"
-                                       data-tippy-inertia="true"
-                                       data-tippy-animation="shift-away"
-                                       data-tippy-delay="50"
-                                       data-tippy-arrow="true"
-                                       data-tippy-theme="sharpborder"></i>
-                                </a>
-                                <a href="single-product-variable.html"
-                                   class="product-item_img">
-                                    <img class="img-full"
-                                         src="~/assets/images/product/small-size/2-1-70x78.png"
-                                         alt="Product Image" />
-                                </a>
-                                <div class="product-item_content">
-                                    <a class="product-item_title"
-                                       href="single-product-variable.html">American Marigold</a>
-                                    <span class="product-item_quantity">1 x $23.45</span>
-                                </div>
-                            </li>
-                            <li class="minicart-product">
-                                <a class="product-item_remove" href="#">
-                                    <i class="pe-7s-close"
-                                       data-tippy="Remove"
-                                       data-tippy-inertia="true"
-                                       data-tippy-animation="shift-away"
-                                       data-tippy-delay="50"
-                                       data-tippy-arrow="true"
-                                       data-tippy-theme="sharpborder"></i>
-                                </a>
-                                <a href="single-product-variable.html"
-                                   class="product-item_img">
-                                    <img class="img-full"
-                                         src="~/assets/images/product/small-size/2-2-70x78.png"
-                                         alt="Product Image" />
-                                </a>
-                                <div class="product-item_content">
-                                    <a class="product-item_title"
-                                       href="single-product-variable.html">Black Eyed Susan</a>
-                                    <span class="product-item_quantity">1 x $25.45</span>
-                                </div>
-                            </li>
-                            <li class="minicart-product">
-                                <a class="product-item_remove" href="#">
-                                    <i class="pe-7s-close"
-                                       data-tippy="Remove"
-                                       data-tippy-inertia="true"
-                                       data-tippy-animation="shift-away"
-                                       data-tippy-delay="50"
-                                       data-tippy-arrow="true"
-                                       data-tippy-theme="sharpborder"></i>
-                                </a>
-                                <a href="single-product-variable.html"
-                                   class="product-item_img">
-                                    <img class="img-full"
-                                         src="~/assets/images/product/small-size/2-3-70x78.png"
-                                         alt="Product Image" />
-                                </a>
-                                <div class="product-item_content">
-                                    <a class="product-item_title"
-                                       href="single-product-variable.html">Bleeding Heart</a>
-                                    <span class="product-item_quantity">1 x $30.45</span>
-                                </div>
-                            </li>
+                            @foreach (BasketItemVM item in basketItems)
+                            {
+                                total += item.SubTotal;
+                                <li class="minicart-product">
+                                    <a class="product-item_remove" href="#">
+                                        <i class="pe-7s-close"
+                                           data-tippy="Remove"
+                                           data-tippy-inertia="true"
+                                           data-tippy-animation="shift-away"
+                                           data-tippy-delay="50"
+                                           data-tippy-arrow="true"
+                                           data-tippy-theme="sharpborder"></i>
+                                    </a>
+                                    <a href="single-product-variable.html"
+                                       class="product-item_img">
+                                        <img class="img-full"
+                                             src="~/assets/images/website-images/@item.Image"
+                                             alt="Product Image" />
+                                    </a>
+                                    <div class="product-item_content">
+                                        <a class="product-item_title"
+                                           href="single-product-variable.html">@item.Name</a>
+                                        <span class="product-item_quantity">@item.Count x $@item.Price</span>
+                                    </div>
+                                </li>
+                            }
+                            
                         </ul>
                     </div>
-                    <div class="minicart-item_total">
-                        <span>Subtotal</span>
-                        <span class="ammount">$79.35</span>
-                    </div>
-                    <div class="group-btn_wrap d-grid gap-2">
-                        <a href="cart.html" class="btn btn-dark">View Cart</a>
-                        <a href="checkout.html" class="btn btn-dark">Checkout</a>
-                    </div>
+                    @if (basketItems.Count != 0)
+                    {
+                        <div class="minicart-item_total">
+                            <span>Total</span>
+                            <span class="ammount">$@total</span>
+                        </div>
+                        <div class="group-btn_wrap d-grid gap-2">
+                            <a asp-action="index" asp-controller="basket" class="btn btn-dark">View Cart</a>
+                            <a href="checkout.html" class="btn btn-dark">Checkout</a>
+                        </div>
+                    }
+                    else{
+                        <div class="minicart-item_total">
+                            <span>Your Cart is Empty <a asp-action="index" asp-controller="shop">Shop Now</a></span>
+                           
+                        </div>
+                    }
                 </div>
             </div>
             <div class="global-overlay"></div>

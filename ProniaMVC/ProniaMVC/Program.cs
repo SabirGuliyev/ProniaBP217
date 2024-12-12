@@ -8,6 +8,13 @@ using ProniaMVC.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddSession(opt=>opt.IdleTimeout=TimeSpan.FromSeconds(60));
+//builder.Services.AddScoped<IHttpContextAccessor,HttpContextAccessor>();
+
+builder.Services.AddHttpContextAccessor();
+
+
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 
@@ -31,7 +38,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
 builder.Services.AddScoped<ILayoutService,LayoutService>();
 var app = builder.Build();
 
-
+//app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
