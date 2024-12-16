@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Newtonsoft.Json;
 using ProniaMVC.DAL;
 using ProniaMVC.Models;
+using ProniaMVC.Services.Interfaces;
 using ProniaMVC.ViewModels;
 using System.Collections.Generic;
 using System.Net;
@@ -16,82 +18,18 @@ namespace ProniaMVC.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IBasketService _basketService;
 
-        public BasketController(AppDbContext context,UserManager<AppUser> userManager)
+        public BasketController(AppDbContext context,UserManager<AppUser> userManager,IBasketService basketService)
         {
             _context = context;
             _userManager = userManager;
+            _basketService = basketService;
         }
         public async Task<IActionResult> Index()
         {
-            List<BasketItemVM> basketVM = new();
+            return View(await _basketService.GetBasketAsync());
 
-            if (User.Identity.IsAuthenticated)
-            {
-
-               
-                //basketVM= await _userManager.Users
-                //    .Include(u => u.BasketItems)
-                //    .Where(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
-                //    .SelectMany(u=>u.BasketItems)
-                //    .Select(bi=> new BasketItemVM 
-                //    {
-                //        Count=bi.Count,
-                //        Image=bi.Product.ProductImages.FirstOrDefault(pi=>pi.IsPrimary==true).Image,
-                //        Name=bi.Product.Name,
-                //        Price=bi.Product.Price,
-                //        SubTotal=bi.Count*bi.Product.Price,
-                //         Id = bi.ProductId
-                //    }).ToListAsync();
-
-                basketVM =await _context.BasketItems
-                    .Where(bi=>bi.AppUserId==User.FindFirstValue(ClaimTypes.NameIdentifier))
-                    .Select(bi=> new BasketItemVM
-                    {
-                        Count = bi.Count,
-                        Price=bi.Product.Price,
-                        Image=bi.Product.ProductImages.FirstOrDefault(pi=>pi.IsPrimary==true).Image,
-                        Name=bi.Product.Name,
-                        SubTotal=bi.Product.Price*bi.Count,
-                        Id=bi.ProductId
-                       
-                    })
-                    .ToListAsync();
-
-            }
-            else
-            {
-                List<BasketCookieItemVM> cookiesVM;
-                string cookie = Request.Cookies["basket"];
-
-
-                if (cookie is null)
-                {
-                    return View(basketVM);
-                }
-
-                cookiesVM = JsonConvert.DeserializeObject<List<BasketCookieItemVM>>(cookie);
-                foreach (BasketCookieItemVM item in cookiesVM)
-                {
-                    Product product = await _context.Products.Include(p => p.ProductImages.Where(p => p.IsPrimary == true)).FirstOrDefaultAsync(p => p.Id == item.Id);
-                    if (product is not null)
-                    {
-                        basketVM.Add(new BasketItemVM
-                        {
-                            Id = product.Id,
-                            Name = product.Name,
-                            Image = product.ProductImages[0].Image,
-                            Price = product.Price,
-                            Count = item.Count,
-                            SubTotal = item.Count * product.Price
-
-                        });
-                    }
-                }
-            }
-            
-
-            return View(basketVM);
         }
 
         public async Task<IActionResult> AddBasket(int? id)
@@ -172,12 +110,80 @@ namespace ProniaMVC.Controllers
 
             }
 
-            return RedirectToAction("Index", "Home");
+
+            return RedirectToAction(nameof(GetBasket));
+            
         }
 
-        public IActionResult GetBasket()
+        public async Task<IActionResult> GetBasket()
         {
-            return Content(Request.Cookies["basket"]);
+            return PartialView("BasketPartialView", await _basketService.GetBasketAsync());
+        }
+
+        [Authorize(Roles ="Member")]
+        public async Task<IActionResult> Checkout()
+        {
+
+
+            OrderVM orderVM = new()
+            {
+                BasketInOrderVMs = await _context.BasketItems
+                .Where(bi => bi.AppUserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .Select(bi => new BasketInOrderVM
+                {
+                    Count = bi.Count,
+                    Name = bi.Product.Name,
+                    Price = bi.Product.Price,
+                    SubTotal=bi.Product.Price*bi.Count
+                })
+                .ToListAsync()
+            };
+            return View(orderVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout(OrderVM orderVM)
+        {
+            List<BasketItem> basketItems = await _context.BasketItems
+                .Where(bi => bi.AppUserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .Include(bi=>bi.Product)
+                .ToListAsync();
+            if (!ModelState.IsValid)
+            {
+                orderVM.BasketInOrderVMs=basketItems.Select(bi => new BasketInOrderVM
+                {
+                    Count = bi.Count,
+                    Name = bi.Product.Name,
+                    Price = bi.Product.Price,
+                    SubTotal = bi.Product.Price * bi.Count
+                }).ToList();
+                return View(orderVM);
+            }
+
+            Order order=new Order 
+            { 
+              Address=orderVM.Address,
+              Status=null,
+              AppUserId= User.FindFirstValue(ClaimTypes.NameIdentifier),
+              CreatedAt=DateTime.Now,
+              IsDeleted=false,
+              OrderItems=basketItems.Select(bi=>new OrderItem
+              {
+                  AppUserId= User.FindFirstValue(ClaimTypes.NameIdentifier),
+                  Count=bi.Count,
+                  Price=bi.Product.Price,
+                  ProductId=bi.ProductId
+              }).ToList(),
+              TotalPrice=basketItems.Sum(bi=>bi.Product.Price*bi.Count)
+            };
+
+            await _context.Orders.AddAsync(order);
+            _context.BasketItems.RemoveRange(basketItems);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
+
         }
     }
 }

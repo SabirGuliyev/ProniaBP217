@@ -512,3 +512,33 @@
     </div>
 </div>
 <!-- Blog Area End Here -->
+
+
+
+
+<script>
+
+   var  addBtns=document.querySelectorAll(".cus-add-basket")
+
+    addBtns.forEach(b => {
+
+        b.addEventListener("click", function (e) {
+
+            e.preventDefault()
+
+            var endpoint=this.getAttribute("href")
+            
+            $.ajax({
+                type:"GET",
+                url: endpoint
+
+            }).done(data => {
+
+                var cart = document.querySelector("#miniCart")
+                cart.innerHTML=data
+            })
+        })
+    })
+
+
+</script>

@@ -1,10 +1,11 @@
 ﻿
 @using ProniaMVC.Services.Interfaces
 @inject ILayoutService _layoutService;
+@inject IBasketService _basketService;
 @{
 
     Dictionary<string, string> settings = await _layoutService.GetSettingsAsync();
-    List<BasketItemVM> basketItems = await _layoutService.GetBasketAsync();
+    List<BasketItemVM> basketItems = await _basketService.GetBasketAsync();
     decimal total = 0;
 }
 
@@ -821,68 +822,8 @@
                 </div>
             </div>
             <div class="offcanvas-minicart_wrapper" id="miniCart">
-                <div class="offcanvas-body">
-                    <div class="minicart-content">
-                        <div class="minicart-heading">
-                            <h4 class="mb-0">Shopping Cart</h4>
-                            <a href="#" class="button-close">
-                                <i class="pe-7s-close"
-                                   data-tippy="Close"
-                                   data-tippy-inertia="true"
-                                   data-tippy-animation="shift-away"
-                                   data-tippy-delay="50"
-                                   data-tippy-arrow="true"
-                                   data-tippy-theme="sharpborder"></i>
-                            </a>
-                        </div>
-                        <ul class="minicart-list">
-                            @foreach (BasketItemVM item in basketItems)
-                            {
-                                total += item.SubTotal;
-                                <li class="minicart-product">
-                                    <a class="product-item_remove" href="#">
-                                        <i class="pe-7s-close"
-                                           data-tippy="Remove"
-                                           data-tippy-inertia="true"
-                                           data-tippy-animation="shift-away"
-                                           data-tippy-delay="50"
-                                           data-tippy-arrow="true"
-                                           data-tippy-theme="sharpborder"></i>
-                                    </a>
-                                    <a href="single-product-variable.html"
-                                       class="product-item_img">
-                                        <img class="img-full"
-                                             src="~/assets/images/website-images/@item.Image"
-                                             alt="Product Image" />
-                                    </a>
-                                    <div class="product-item_content">
-                                        <a class="product-item_title"
-                                           href="single-product-variable.html">@item.Name</a>
-                                        <span class="product-item_quantity">@item.Count x $@item.Price</span>
-                                    </div>
-                                </li>
-                            }
-                            
-                        </ul>
-                    </div>
-                    @if (basketItems.Count != 0)
-                    {
-                        <div class="minicart-item_total">
-                            <span>Total</span>
-                            <span class="ammount">$@total</span>
-                        </div>
-                        <div class="group-btn_wrap d-grid gap-2">
-                            <a asp-action="index" asp-controller="basket" class="btn btn-dark">View Cart</a>
-                            <a href="checkout.html" class="btn btn-dark">Checkout</a>
-                        </div>
-                    }
-                    else{
-                        <div class="minicart-item_total">
-                            <span>Your Cart is Empty <a asp-action="index" asp-controller="shop">Shop Now</a></span>
-                           
-                        </div>
-                    }
-                </div>
+               @await Html.PartialAsync("BasketPartialView",basketItems);
+                @* <partial name="BasketPartialView" model="basketItems"></partial> *@
             </div>
             <div class="global-overlay"></div>
         </header>

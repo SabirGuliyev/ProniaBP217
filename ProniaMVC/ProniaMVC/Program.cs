@@ -36,6 +36,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
 }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddScoped<ILayoutService,LayoutService>();
+builder.Services.AddScoped<IBasketService,BasketService>();
 var app = builder.Build();
 
 //app.UseSession();
